@@ -1,12 +1,12 @@
 import CardState from "./CardState.js";
 
-export default class Card{
-    constructor(forme) {
-        this.forme = forme
-        this.state=CardState.HIDDEN
+export default class Card {
+    constructor(form) {
+        this.form = form
+        this.state = CardState.HIDDEN
     }
 
     turnCard() {
-        this.etat= this.etat==CardState.HIDDEN? CardState.REVEALED : CardState.HIDDEN
+        this.state = this.state == CardState.HIDDEN ? CardState.REVEALED : CardState.HIDDEN
     }
 }
