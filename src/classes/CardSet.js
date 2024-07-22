@@ -1,33 +1,54 @@
-import Card from "./card.js";
 import CardState from "./CardState.js";
 
-export default class CardSet{
+export default class CardSet {
     constructor(cardset) {
-        this.cardSet=cardset
+        this.cardSet = cardset
+        this.currentSelection = []
     }
 
-    turnCards(card1, card2) {
-        if (card1.state == CardState.HIDDEN && card2.state == CardState.HIDDEN) {
-            card1.turnCard()
-            card2.turnCard()
-            return true
+    selectCard(selectedPosition) {
+        if (this.currentSelection.length < 2) {
+            for (const card of this.cardSet) {
+                if (card.position == selectedPosition) {
+                    if (card.state == CardState.REVEALED || !this.currentSelection.find((card) => card.position = selectedPosition)) {
+                        return false
+                    }
+                    card.turnCard()
+                    this.currentSelection.push(card)
+                    return true
+                }
+            }
         }
         return false
     }
 
-    areEquals(card1, card2) {
-        return card1.form==card2.form
+    areEquals() {
+        return this.currentSelection[0].shape == this.currentSelection[1].shape
     }
 
-    guessPair(card1, card2) {
-        if (this.turnCards(card1, card2) && this.areEquals(card1, card2)) {
+    guessPair() {
+        this.currentSelection[0].clicCounter++
+        this.currentSelection[1].clicCounter++
+
+        if (this.areEquals()) { //c'est une paire
+            this.currentSelection=[]
             return true
         }
-        else {
-            card1.turnCard()
-            card2.turnCard()
-            return false
-        }
+        //raté! on retourne les cartes
+        this.currentSelection[0].turnCard()
+        this.currentSelection[1].turnCard()
+        this.currentSelection = []
+        return false
+
     }
 
+    shuffleSet() {
+        this.cardSet.sort(() => Math.random() - 0.5);
+    }
+
+    resetSet() {
+        for (const card of this.cardSet) {
+            card.state = CardState.HIDDEN
+        }
+    }
 }
