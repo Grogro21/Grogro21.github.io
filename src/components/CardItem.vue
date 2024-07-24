@@ -5,15 +5,15 @@ import CardDataManagement from "@/classes/CardDataManagement.js"
 export default {
     computed: {
         image() {
-            return this.card.state == CardState.HIDDEN ? CardDataManagement.loadQmark() : CardDataManagement.loadCard(this.card, this.theme)
+            return this.card.state == CardState.HIDDEN ? CardDataManagement.loadQmark() : CardDataManagement.loadCard(this.card.name, this.theme)
         }
     },
     methods: {
         getImage() {
-            CardDataManagement.loadCard(this.card, this.theme)
+            CardDataManagement.loadCard(this.card.name, this.theme)
         },
         selectCard() {
-            this.$emit('selectCard',this.position)
+            this.$emit('selectCard',this.card.position)
         }
     },
     props: {

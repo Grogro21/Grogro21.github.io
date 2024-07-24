@@ -41,7 +41,8 @@ export default class Level {
     }
 
     shuffleLevelCardSet() {
-        this.cardSet.shuffleLevelCardSet()
+        
+        this.cardSet.shuffleSet()
     }
     endLevel() {
         for (const card of this.cardSet) {

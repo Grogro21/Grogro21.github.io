@@ -7,13 +7,16 @@ export default class CardSet {
     }
 
     selectCard(selectedPosition) {
+
         if (this.currentSelection.length < 2) {
             for (const card of this.cardSet) {
                 if (card.position == selectedPosition) {
-                    if (card.state == CardState.REVEALED || !this.currentSelection.find((card) => card.position = selectedPosition)) {
+                    if (card.state == CardState.REVEALED || this.currentSelection.find((card) => card.position == selectedPosition)) {
                         return false
                     }
+                    console.log(card)
                     card.turnCard()
+                    card.clicCounter++
                     this.currentSelection.push(card)
                     return true
                 }
@@ -31,7 +34,7 @@ export default class CardSet {
         this.currentSelection[1].clicCounter++
 
         if (this.areEquals()) { //c'est une paire
-            this.currentSelection=[]
+            this.currentSelection = []
             return true
         }
         //raté! on retourne les cartes
@@ -43,9 +46,11 @@ export default class CardSet {
     }
 
     shuffleSet() {
+
         this.cardSet.sort(() => Math.random() - 0.5);
         for (let index = 0; index < this.cardSet.length; index++) {
-            this.cardSet[index].position=index+1           
+            console.log(this.cardSet[index])
+            this.cardSet[index].position = index + 1
         }
     }
 

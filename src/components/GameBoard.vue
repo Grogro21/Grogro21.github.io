@@ -8,7 +8,7 @@ export default {
             return this.game.currentLevel.cardSet.cardSet
         },
         currentSelection() {
-            return this.game.cardSet.currentSelection
+            return this.game.currentLevel.cardSet.currentSelection
         }
     },
     components: {
@@ -19,7 +19,8 @@ export default {
     },
     methods: {
         selectCard(position) {
-            
+            this.game.currentLevel.cardSet.selectCard(position)
+
         }
     }
 }
@@ -27,8 +28,8 @@ export default {
 
 <template>
     <div v-if="game?.currentLevel != null">
-        <figure v-for="card of cardset" :key="card.position">
-            <CardItem :card="card" :theme="game.theme" @selectCard="selectCard"/>
+        <figure v-for="card of cardset" :key="card.id">
+            <CardItem :card="card" :theme="game.theme" @selectCard="selectCard" />
         </figure>
 
     </div>

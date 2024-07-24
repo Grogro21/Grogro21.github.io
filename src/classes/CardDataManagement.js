@@ -1,6 +1,8 @@
 export default class CardDataManagement{
-    static loadCard(card, theme) {
-        return '/pictures/' + theme + '/' + card.shape
+
+    static loadCard(name, theme) {
+
+        return '/pictures/' + theme + '/' + name
     }
 
     static loadQmark() {

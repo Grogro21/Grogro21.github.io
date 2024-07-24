@@ -31,12 +31,9 @@ export default class Game {
         }
 
         const cardSet = []
-        for (const { id } of json) {
-            cardSet.push(new Card(id, id * 2))
-        }
-        const l = cardSet.length
-        for (let index = 0; index < l; index++) {
-            cardSet.push(new Card(index + 1, index + 1))
+        for (const { id, name } of json) {
+            cardSet.push(new Card(id, 2 * id - 1, name))
+            cardSet.push(new Card(id, id * 2, name))
         }
         this.globalCardSet = new CardSet(cardSet)
 
@@ -91,8 +88,10 @@ export default class Game {
     }
 
     nextLevel() {
-        if (this.pastLevels == []) {
+        
+        if (this.pastLevels.length==0) {
             this.currentLevel = new Level(this.globalCardSet, 2)
+            
             this.genLevel()
             this.currentLevel.shuffleLevelCardSet()
             return
