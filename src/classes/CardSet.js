@@ -44,6 +44,9 @@ export default class CardSet {
 
     shuffleSet() {
         this.cardSet.sort(() => Math.random() - 0.5);
+        for (let index = 0; index < this.cardSet.length; index++) {
+            this.cardSet[index].position=index+1           
+        }
     }
 
     resetSet() {
