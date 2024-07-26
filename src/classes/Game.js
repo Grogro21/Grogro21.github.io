@@ -43,33 +43,41 @@ export default class Game {
         return this.type == "test" ? 6 : 7
     }
 
-    genLevel() {
+    genLevel(id) {
         if (this.type == "test") {
-            this.currentLevel = new Level(this.globalCardSet, 12)
+            this.currentLevel = new Level(this.globalCardSet, 12, id)
 
         }
         else {
-            switch (this.currentLevel.idLevel) {
+            const localCardSet = new CardSet(this.globalCardSet.cardSet.map(x => new Card(x)))
+            switch (id) {
                 case 1:
-                    this.currentLevel = new Level(this.globalCardSet, 2)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 4)
+                    this.currentLevel = new Level(localCardSet, 2, id)
                     break;
                 case 2:
-                    this.currentLevel = new Level(this.globalCardSet, 4)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 8)
+                    this.currentLevel = new Level(localCardSet, 4, id)
                     break;
                 case 3:
-                    this.currentLevel = new Level(this.globalCardSet, 8)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 16)
+                    this.currentLevel = new Level(localCardSet, 8, id)
                     break;
                 case 4:
-                    this.currentLevel = new Level(this.globalCardSet, 12)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 24)
+                    this.currentLevel = new Level(localCardSet, 12, id)
                     break;
                 case 5:
-                    this.currentLevel = new Level(this.globalCardSet, 16)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 32)
+                    this.currentLevel = new Level(localCardSet, 16, id)
                     break;
                 case 6:
-                    this.currentLevel = new Level(this.globalCardSet, 20)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 40)
+                    this.currentLevel = new Level(localCardSet, 20, id)
                     break;
                 case 7:
-                    this.currentLevel = new Level(this.globalCardSet, 28)
+                    localCardSet.cardSet = this.globalCardSet.cardSet.slice(0, 56)
+                    this.currentLevel = new Level(localCardSet, 28, id)
                     break;
                 default:
                     break;
@@ -79,7 +87,7 @@ export default class Game {
     }
 
     startInterLevelTimer() {
-        this.betweenTimerRunning = setInterval(() => this.betweenLevelsTimer--, 1000)
+        this.betweenTimerRunning = setInterval(() => this.betweenLevelsTimer-=1000, 1000)
     }
 
     stopInterLevelTimer() {
@@ -88,33 +96,36 @@ export default class Game {
     }
 
     nextLevel() {
-        
-        if (this.pastLevels.length==0) {
-            this.currentLevel = new Level(this.globalCardSet, 2)
-            
-            this.genLevel()
+        if (this.currentLevel != null) {
+            this.pastLevels.push(this.currentLevel)
+        }
+        if (this.pastLevels.length == 0) {
+            this.currentLevel = new Level(this.globalCardSet, 2, 1)
+
+            this.genLevel(1)
             this.currentLevel.shuffleLevelCardSet()
             return
         }
-        this.pastLevels.push(this.currentLevel)
-        this.genLevel()
-        this.currentLevel.idLevel = ((this.pastLevels[this.pastLevels.length - 1]?.idLevel) ?? 0) + 1
+        this.betweenTimerRunning = true
         this.startInterLevelTimer()
         if (this.type == "test" && this.endGame()) {
             this.betweenLevelsTimer = 1_200_000
-            setTimeout(this.stopInterLevelTimer(), 1_200_000)
+            setTimeout(this.stopInterLevelTimer(), this.betweenLevelsTimer)
             return
         }
-        this.betweenLevelsTimer = 20_000
-        setTimeout(this.stopInterLevelTimer(), 20_000)
+        this.betweenLevelsTimer = 2_000
+        setTimeout(() => this.stopInterLevelTimer(), this.betweenLevelsTimer)
+        this.genLevel(((this.pastLevels[this.pastLevels.length - 1].idLevel)) + 1)
+
     }
 
     endGame() {
         return this.currentLevel.idLevel == this.getNbLevels()
     }
 
-    play() {
-        this.currentLevel.guess()
+    async play(position) {
+        await this.currentLevel.guess(position)
+        this.currentLevel.endLevel()
         if (this.currentLevel.isFinished) {
             if (!this.endGame()) {
                 this.nextLevel()

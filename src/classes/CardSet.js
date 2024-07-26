@@ -1,9 +1,11 @@
 import CardState from "./CardState.js";
+import SelectState from "./SelectState.js";
 
 export default class CardSet {
     constructor(cardset) {
         this.cardSet = cardset
         this.currentSelection = []
+        this.selectionState = SelectState.PENDING
     }
 
     selectCard(selectedPosition) {
@@ -14,7 +16,6 @@ export default class CardSet {
                     if (card.state == CardState.REVEALED || this.currentSelection.find((card) => card.position == selectedPosition)) {
                         return false
                     }
-                    console.log(card)
                     card.turnCard()
                     card.clicCounter++
                     this.currentSelection.push(card)
@@ -29,17 +30,33 @@ export default class CardSet {
         return this.currentSelection[0].shape == this.currentSelection[1].shape
     }
 
-    guessPair() {
+    hideCards() {
+        this.currentSelection[0].turnCard()
+        this.currentSelection[1].turnCard()
+    }
+
+    async guessPair(position) {
+        if (!this.selectCard(position)) {
+            return
+        }
+        if (this.currentSelection.length != 2) {
+            this.selectionState = CardState.PENDING
+            return
+        }
         this.currentSelection[0].clicCounter++
         this.currentSelection[1].clicCounter++
 
         if (this.areEquals()) { //c'est une paire
             this.currentSelection = []
+            this.selectionState = CardState.MATCH
             return true
         }
         //raté! on retourne les cartes
-        this.currentSelection[0].turnCard()
-        this.currentSelection[1].turnCard()
+        
+        this.selectionState = CardState.DIFF
+
+        await new Promise(res => setTimeout(res, 800));
+        this.hideCards()
         this.currentSelection = []
         return false
 
@@ -49,7 +66,6 @@ export default class CardSet {
 
         this.cardSet.sort(() => Math.random() - 0.5);
         for (let index = 0; index < this.cardSet.length; index++) {
-            console.log(this.cardSet[index])
             this.cardSet[index].position = index + 1
         }
     }

@@ -2,16 +2,22 @@ import CardState from "./CardState.js";
 
 
 export default class Level {
-    constructor(cardSet, nbCards) {
+    constructor(cardSet, nbCards,id) {
         this.cardSet = cardSet
         this.timer = 0
         this.isFinished = false
         this.timerRunning = null
         this.nbCards = nbCards
         this.nbGuess = 0
-        this.idLevel = 1
+        this.idLevel = id
+        this.hideEverything()
     }
 
+    hideEverything() {
+        this.cardSet.cardSet.forEach(card => {
+            card.state=CardState.HIDDEN
+        });
+    }
     startTimer() {
         this.timerRunning = setInterval(() => this.timer+=0.1, 100)
     }
@@ -30,10 +36,10 @@ export default class Level {
     }
 
 
-    guess() {
+    async guess(position) {
         this.nbGuess++
 
-        if (this.cardSet.guessPair()) {
+        if (await this.cardSet.guessPair(position)) {
             return true
         }
 
@@ -45,7 +51,7 @@ export default class Level {
         this.cardSet.shuffleSet()
     }
     endLevel() {
-        for (const card of this.cardSet) {
+        for (const card of this.cardSet.cardSet) {
             if (card.state == CardState.HIDDEN) {
                 return false
             }

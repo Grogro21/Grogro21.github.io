@@ -18,9 +18,9 @@ export default {
         game: Game
     },
     methods: {
-        selectCard(position) {
-            this.game.currentLevel.cardSet.selectCard(position)
-
+        async selectCard(position) {
+            await this.game.play(position)
+            
         }
     }
 }

@@ -1,7 +1,7 @@
 <script>
 import Theme from "@/components/ThemeChoice.vue"
 import UserName from "@/components/UserName.vue"
-import Variant from "@/components/Variant.vue"
+import Variant from "@/components/VariantChoice.vue"
 import ValidateButton from "@/components/ValidateButton.vue"
 import GameDataManagement from "@/classes/GameDataManagement";
 export default {

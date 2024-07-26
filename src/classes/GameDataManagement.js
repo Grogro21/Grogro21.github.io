@@ -17,10 +17,10 @@ export default class GameDataManagement {
 
     
 
-    storeStats() {
+    static storeStats() {
 
     }
-    readUserData() {
+    static readUserData() {
 
     }
 }

@@ -1,7 +1,8 @@
 <script>
 import Game from "@/classes/Game.js"
-import GameDataManagement from "@/classes/GameDataManagement";
+import GameDataManagement from "@/classes/GameDataManagement.js"
 import GameBoard from "@/components/GameBoard.vue"
+import WaitingScreen from "@/components/WaitingScreen.vue";
 export default {
     data() {
         return {
@@ -12,7 +13,7 @@ export default {
         }
     },
     components: {
-        GameBoard
+        GameBoard, WaitingScreen
     },
     async beforeCreate() {
         const userData = await GameDataManagement.loadSession()
@@ -22,10 +23,12 @@ export default {
         this.game = new Game(this.theme, this.variant, this.userName)
         await this.game.genCardSet()
         this.game.nextLevel()
-        
     }
 }
 </script>
 <template>
-    <GameBoard :game="game"></GameBoard>
+    <div v-if="game != null">
+        <GameBoard :game="game" v-if="game.betweenTimerRunning == false"></GameBoard>
+        <WaitingScreen v-else :timer="game.betweenLevelsTimer"></WaitingScreen>
+    </div>
 </template>
