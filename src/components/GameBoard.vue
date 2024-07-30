@@ -9,7 +9,7 @@ export default {
         },
         currentSelection() {
             return this.game.currentLevel.cardSet.currentSelection
-        }
+        },
     },
     components: {
         CardItem
@@ -21,6 +21,7 @@ export default {
         async selectCard(position) {
             await this.game.play(position)
             
+            
         }
     }
 }
@@ -29,7 +30,7 @@ export default {
 <template>
     <div v-if="game?.currentLevel != null">
         <figure v-for="card of cardset" :key="card.id">
-            <CardItem :card="card" :theme="game.theme" @selectCard="selectCard" />
+            <CardItem :card="card" :nbCards="game.currentLevel.nbCards" :theme="game.theme" @selectCard="selectCard" />
         </figure>
 
     </div>
@@ -38,8 +39,8 @@ export default {
 
 <style scoped>
 div {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin: 0 auto;
     width: fit-content;

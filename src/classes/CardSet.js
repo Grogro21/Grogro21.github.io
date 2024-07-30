@@ -17,6 +17,7 @@ export default class CardSet {
                         return false
                     }
                     card.turnCard()
+                    
                     card.clicCounter++
                     this.currentSelection.push(card)
                     return true
@@ -37,7 +38,7 @@ export default class CardSet {
 
     async guessPair(position) {
         if (!this.selectCard(position)) {
-            return
+            return "noIncrement"
         }
         if (this.currentSelection.length != 2) {
             this.selectionState = CardState.PENDING

@@ -2,7 +2,7 @@ import CardState from "./CardState.js";
 
 
 export default class Level {
-    constructor(cardSet, nbCards,id) {
+    constructor(cardSet, nbCards, id) {
         this.cardSet = cardSet
         this.timer = 0
         this.isFinished = false
@@ -10,16 +10,20 @@ export default class Level {
         this.nbCards = nbCards
         this.nbGuess = 0
         this.idLevel = id
+        this.levelClics = []
+        this.cardSet.cardSet.forEach(card => {
+            this.levelClics.push({"name":card.name,"clics":card.clicCounter})
+        });
         this.hideEverything()
     }
 
     hideEverything() {
         this.cardSet.cardSet.forEach(card => {
-            card.state=CardState.HIDDEN
+            card.state = CardState.HIDDEN
         });
     }
     startTimer() {
-        this.timerRunning = setInterval(() => this.timer+=0.1, 100)
+        this.timerRunning = setInterval(() => this.timer += 0.1, 100)
     }
 
     stopTimer() {
@@ -28,18 +32,22 @@ export default class Level {
     }
 
     getMinScore() {
-        return this.nbCards / 2
+        return this.nbCards
     }
 
     selectCard(selectedPosition) {
         return this.cardSet.selectCard(selectedPosition)
     }
 
-
     async guess(position) {
-        this.nbGuess++
-
-        if (await this.cardSet.guessPair(position)) {
+        if (this.timerRunning == null) {
+            this.startTimer()
+        }
+        const isPair = await this.cardSet.guessPair(position)
+        if (isPair != "noIncrement") {
+            this.nbGuess++
+        }
+        if (isPair) {
             return true
         }
 
@@ -47,7 +55,7 @@ export default class Level {
     }
 
     shuffleLevelCardSet() {
-        
+
         this.cardSet.shuffleSet()
     }
     endLevel() {
@@ -56,12 +64,18 @@ export default class Level {
                 return false
             }
         }
+
+        for (const i in this.levelClics) {
+            this.levelClics[i].clics = this.cardSet.cardSet[i].clicCounter - this.levelClics[i].clics
+        }
+            
+            
         this.stopTimer()
         this.isFinished = true
         return true
     }
 
     calcSuccessRate() {
-        return 100 - ((this.nbGuess - this.getMinScore()) / this.nbGuess * 100).toFixed(1)
+        return 100 - ((this.nbGuess / 2 - this.getMinScore()) / (this.nbGuess / 2) * 100).toFixed(1)
     }
 }

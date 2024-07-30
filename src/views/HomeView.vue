@@ -10,6 +10,7 @@ export default {
             username: "",
             theme: "abstract",
             variant: "test",
+            errorText:""
 
         }
     },
@@ -26,8 +27,9 @@ export default {
             if (this.isValid()) {
                 GameDataManagement.storeSession(this.username,this.theme,this.variant)
                 this.$router.push({ name: 'game' })
+                return
             }
-
+            this.errorText="Rentrez un nom valide de type prénom nom (plus de 2 lettres par mot)"
         }
     }
 }
@@ -37,11 +39,19 @@ export default {
 <template>
     <h1>Memory</h1>
     <form action="">
-        <Theme v-model:theme="theme"></Theme>
+        <Theme v-model:theme="theme" id="theme"></Theme>
         <Variant v-model:variant="variant"></Variant>
         <UserName v-model:username="username"></UserName>
         <hr>
+        <p>{{ errorText }}</p>
         <ValidateButton @submit="startGame"></ValidateButton>
     </form>
 
 </template>
+
+<style scoped> 
+    h1{
+        font-size: 300%;
+        text-align: center;
+    }
+</style>

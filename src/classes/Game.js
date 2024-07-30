@@ -24,7 +24,7 @@ export default class Game {
         this.pictures = await GameDataManagement.readPicturesData(this.theme)
         let json = ""
         if (this.type == "test") {
-            json = this.pictures.slice(0, 12)
+            json = this.pictures.slice(0, 2)
         }
         else {
             json = this.pictures.slice(0, 28)
@@ -45,7 +45,7 @@ export default class Game {
 
     genLevel(id) {
         if (this.type == "test") {
-            this.currentLevel = new Level(this.globalCardSet, 12, id)
+            this.currentLevel = new Level(this.globalCardSet, 2, id)
 
         }
         else {
@@ -87,7 +87,7 @@ export default class Game {
     }
 
     startInterLevelTimer() {
-        this.betweenTimerRunning = setInterval(() => this.betweenLevelsTimer-=1000, 1000)
+        this.betweenTimerRunning = setInterval(() => this.betweenLevelsTimer -= 1000, 1000)
     }
 
     stopInterLevelTimer() {
@@ -96,11 +96,11 @@ export default class Game {
     }
 
     nextLevel() {
+        this.currentLevel?.stopTimer()
         if (this.currentLevel != null) {
             this.pastLevels.push(this.currentLevel)
         }
         if (this.pastLevels.length == 0) {
-            this.currentLevel = new Level(this.globalCardSet, 2, 1)
 
             this.genLevel(1)
             this.currentLevel.shuffleLevelCardSet()
@@ -108,18 +108,20 @@ export default class Game {
         }
         this.betweenTimerRunning = true
         this.startInterLevelTimer()
-        if (this.type == "test" && this.endGame()) {
-            this.betweenLevelsTimer = 1_200_000
-            setTimeout(this.stopInterLevelTimer(), this.betweenLevelsTimer)
-            return
+        if (this.type == "test" && this.currentLevel.idLevel + 1 == this.getNbLevels()) {
+            this.betweenLevelsTimer = 2000//1_200_000
         }
-        this.betweenLevelsTimer = 2_000
+        else {
+            this.betweenLevelsTimer = 2_000//20_000
+        }
         setTimeout(() => this.stopInterLevelTimer(), this.betweenLevelsTimer)
         this.genLevel(((this.pastLevels[this.pastLevels.length - 1].idLevel)) + 1)
-
+        
     }
 
     endGame() {
+        
+        
         return this.currentLevel.idLevel == this.getNbLevels()
     }
 
@@ -131,8 +133,10 @@ export default class Game {
                 this.nextLevel()
                 return
             }
+            //fin de la game
+            this.pastLevels.push(this.currentLevel)
             this.isFinished = true
-            GameDataManagement.storeStats()
+            GameDataManagement.storeStats(this)
         }
 
     }
@@ -152,7 +156,7 @@ export default class Game {
             totalGuesses += level.nbGuess
             minScore += level.getMinScore()
         });
-        return 100 - ((totalGuesses - minScore) / totalGuesses * 100)
+        return 100 - ((totalGuesses / 2 - minScore) / (totalGuesses / 2) * 100)
     }
 
 }
