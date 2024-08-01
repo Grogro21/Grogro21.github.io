@@ -2,6 +2,7 @@
 import Game from '@/classes/Game.js';
 import GameDataManagement from '@/classes/GameDataManagement.js';
 import CardStat from './CardStat.vue';
+import CsvConverter from '@/classes/CsvConverter';
 
 export default {
     data() {
@@ -28,12 +29,11 @@ export default {
     methods: {
         concatenatePairs() {
             const realLevels = []
-            console.log(this.levels.length)
             for (let id = 0; id < this.levels.length; id++) {
-                
+
                 const finalCardset = []
                 this.levels[id].clics.forEach(cardToCheck => {
-                    
+
                     if (finalCardset.length == 0) {
                         finalCardset.push({ "name": cardToCheck.name, "clics": cardToCheck.clics })
                     }
@@ -44,15 +44,18 @@ export default {
                     if (idToCopy < 0) {
                         finalCardset.push(cardToCheck)
                     }
-        
+
                 });
                 realLevels.push(finalCardset)
             }
             return realLevels
+        },
+        convertToCSV() {
+            CsvConverter.convertToCSV()
         }
     },
     computed: {
-        
+
     },
     mounted() {
         const userStats = GameDataManagement.readUserData()
@@ -69,6 +72,7 @@ export default {
 </script>
 <template>
     <h1>Bravo !!!</h1>
+    <button @click="convertToCSV()">Exporter en CSV</button>
     <div id="global">
         <h2>Résultats Globaux</h2>
         <p>Joueur : {{ userName }}!</p>
@@ -131,14 +135,15 @@ h2 {
     color: var(--resultat-text)
 }
 
-h3{
+h3 {
     text-align: center;
-    margin-top:1rem
+    margin-top: 1rem
 }
-#scores{
+
+#scores {
     display: flex;
-    gap:2rem;
+    gap: 2rem;
     justify-content: center;
-    margin-bottom:1rem
+    margin-bottom: 1rem
 }
 </style>

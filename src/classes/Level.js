@@ -69,7 +69,6 @@ export default class Level {
             this.levelClics[i].clics = this.cardSet.cardSet[i].clicCounter - this.levelClics[i].clics
         }
             
-            
         this.stopTimer()
         this.isFinished = true
         return true

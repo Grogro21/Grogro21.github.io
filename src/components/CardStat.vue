@@ -31,7 +31,7 @@ export default {
 <template>
     <div>
         <img :src="image" alt="" :style="{ 'width': cardSize + 'rem', 'height': cardSize + 'rem' }">
-        <p>Nombre de clics: {{ card.clics }}</p>
+        <p>Nombre de clics max sur la carte: {{ card.clics }}</p>
     </div>
 </template>
 

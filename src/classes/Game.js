@@ -24,7 +24,7 @@ export default class Game {
         this.pictures = await GameDataManagement.readPicturesData(this.theme)
         let json = ""
         if (this.type == "test") {
-            json = this.pictures.slice(0, 3)
+            json = this.pictures.slice(0, 12)
         }
         else {
             json = this.pictures.slice(0, 28)
@@ -45,7 +45,7 @@ export default class Game {
 
     genLevel(id) {
         if (this.type == "test") {
-            this.currentLevel = new Level(this.globalCardSet, 3, id)
+            this.currentLevel = new Level(this.globalCardSet, 12, id)
 
         }
         else {
@@ -108,11 +108,14 @@ export default class Game {
         }
         this.betweenTimerRunning = true
         this.startInterLevelTimer()
-        if (this.type == "test" && this.currentLevel.idLevel + 1 == this.getNbLevels()) {
-            this.betweenLevelsTimer = 2000//1_200_000
+        if (this.type != "test") {
+            this.betweenLevelsTimer = 3_000
+        }
+        else if (this.type == "test" && this.currentLevel.idLevel + 1 == this.getNbLevels()) {
+            this.betweenLevelsTimer = 1_200_000
         }
         else {
-            this.betweenLevelsTimer = 2_000//20_000
+            this.betweenLevelsTimer = 20_000
         }
         setTimeout(() => this.stopInterLevelTimer(), this.betweenLevelsTimer)
         this.genLevel(((this.pastLevels[this.pastLevels.length - 1].idLevel)) + 1)

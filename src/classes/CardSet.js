@@ -13,7 +13,7 @@ export default class CardSet {
         if (this.currentSelection.length < 2) {
             for (const card of this.cardSet) {
                 if (card.position == selectedPosition) {
-                    if (card.state == CardState.REVEALED || this.currentSelection.find((card) => card.position == selectedPosition)) {
+                    if (card.state == CardState.REVEALED || card.state ==CardState.FOUND || this.currentSelection.find((card) => card.position == selectedPosition)) {
                         return false
                     }
                     card.turnCard()
@@ -41,20 +41,23 @@ export default class CardSet {
             return "noIncrement"
         }
         if (this.currentSelection.length != 2) {
-            this.selectionState = CardState.PENDING
+            this.selectionState = SelectState.PENDING
             return
         }
         this.currentSelection[0].clicCounter++
         this.currentSelection[1].clicCounter++
 
         if (this.areEquals()) { //c'est une paire
+            this.currentSelection[0].state = CardState.FOUND
+            this.currentSelection[1].state = CardState.FOUND
             this.currentSelection = []
-            this.selectionState = CardState.MATCH
+            this.selectionState = SelectState.MATCH
+            
             return true
         }
         //raté! on retourne les cartes
         
-        this.selectionState = CardState.DIFF
+        this.selectionState = SelectState.DIFF
 
         await new Promise(res => setTimeout(res, 800));
         this.hideCards()
