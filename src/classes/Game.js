@@ -24,7 +24,7 @@ export default class Game {
         this.pictures = await GameDataManagement.readPicturesData(this.theme)
         let json = ""
         if (this.type == "test") {
-            json = this.pictures.slice(0, 2)
+            json = this.pictures.slice(0, 3)
         }
         else {
             json = this.pictures.slice(0, 28)
@@ -45,7 +45,7 @@ export default class Game {
 
     genLevel(id) {
         if (this.type == "test") {
-            this.currentLevel = new Level(this.globalCardSet, 2, id)
+            this.currentLevel = new Level(this.globalCardSet, 3, id)
 
         }
         else {

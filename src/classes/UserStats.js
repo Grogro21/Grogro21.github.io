@@ -16,7 +16,7 @@ export default class UserStats{
                 "bestScore": level.getMinScore(),
                 "successRate": level.calcSuccessRate(),
                 "nbCards": level.cardSet.cardSet.length,
-                "clics": level.clics
+                "clics": level.levelClics
             })
             totalTime += level.timer
             totalGuess += level.nbGuess

@@ -3,7 +3,7 @@ import CardDataManagement from "@/classes/CardDataManagement.js"
 export default {
     computed: {
         image() {
-            return CardDataManagement.loadCard(this.card.id, this.theme)
+            return CardDataManagement.loadCard(this.card.name, this.theme)
         },
         cardSize() {
             if (this.nbCards < 12) {
@@ -31,12 +31,13 @@ export default {
 <template>
     <div>
         <img :src="image" alt="" :style="{ 'width': cardSize + 'rem', 'height': cardSize + 'rem' }">
-        <p>Nombre de clics totaux: {{ card.clics }}</p>
+        <p>Nombre de clics: {{ card.clics }}</p>
     </div>
 </template>
 
 <style scoped>
 img {
-    border: 2px solid black
+    border: 2px solid black;
+    
 }
 </style>

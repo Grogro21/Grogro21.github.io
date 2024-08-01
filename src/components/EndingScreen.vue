@@ -2,7 +2,6 @@
 import Game from '@/classes/Game.js';
 import GameDataManagement from '@/classes/GameDataManagement.js';
 import CardStat from './CardStat.vue';
-import CardItem from './CardItem.vue';
 
 export default {
     data() {
@@ -14,35 +13,46 @@ export default {
             globalSuccessRate: 0,
             theme: "",
             levels: [],
-            cards: []
+            cards: [],
+            id: 1,
+            concatenatedPairs: []
         }
     },
     components: {
-        CardStat,CardItem
+        CardStat
     },
     props: {
         game: Game,
 
     },
-    computed: {
-        genCardset() {
-            if (this.cards.length > 0) {
-                let cardDone = []
-                this.cards.forEach(cardToCheck => {  
-                    const idToCopy = cardDone.findIndex((card) => { return card.id == cardToCheck.id })
-
-                    if (cardDone.length > 0 && idToCopy >= 0) {                       
-                        cardDone[idToCopy].clics += cardToCheck.clics
+    methods: {
+        concatenatePairs() {
+            const realLevels = []
+            console.log(this.levels.length)
+            for (let id = 0; id < this.levels.length; id++) {
+                
+                const finalCardset = []
+                this.levels[id].clics.forEach(cardToCheck => {
+                    
+                    if (finalCardset.length == 0) {
+                        finalCardset.push({ "name": cardToCheck.name, "clics": cardToCheck.clics })
                     }
-                    else {
-                        cardDone.push(cardToCheck)
+                    const idToCopy = finalCardset.findIndex((card) => { return card.name == cardToCheck.name })
+                    if (idToCopy >= 0) {
+                        finalCardset[idToCopy].clics = Math.max(finalCardset[idToCopy].clics, cardToCheck.clics)
                     }
+                    if (idToCopy < 0) {
+                        finalCardset.push(cardToCheck)
+                    }
+        
                 });
-                return cardDone  
+                realLevels.push(finalCardset)
             }
-            return null
-            
+            return realLevels
         }
+    },
+    computed: {
+        
     },
     mounted() {
         const userStats = GameDataManagement.readUserData()
@@ -51,9 +61,9 @@ export default {
         this.totalTime = userStats.totalTime
         this.totalGuess = userStats.totalGuess
         this.globalSuccessRate = userStats.globalSuccessRate
-        this.cards=userStats.cards
+        this.cards = userStats.cards
         this.levels = userStats.levels
-
+        this.concatenatedPairs = this.concatenatePairs()
     }
 }
 </script>
@@ -69,60 +79,66 @@ export default {
     <h2>Résultats pour chaque niveau</h2>
     <div id="levelContainer">
         <div id="level" v-for="(level, id) in levels" :key="id">
-            <p>Niveau {{ id + 1 }}</p>
-            <p>Temps : {{ (+level.time).toFixed(2) }}s</p>
-            <p>Meilleur score possible : {{ level.bestScore }}</p>
-            <p>Taux de réussite : {{ (+level.successRate).toFixed(2) }}%</p>
+            <h3>Niveau {{ id + 1 }}</h3>
+            <div id="scores">
+                <p>Temps : {{ (+level.time).toFixed(2) }}s</p>
+                <p>Meilleur score possible : {{ level.bestScore }}</p>
+                <p>Taux de réussite : {{ (+level.successRate).toFixed(2) }}%</p>
+            </div>
             <div id="cardContainer">
-                <div id="card" v-for="card in level.clics" :key="card.id">
-                    {{ card }}
+                <div id="card" v-for="card in concatenatedPairs[id]" :key="card.name">
+                    <CardStat :card="card" :nbCards="game.pastLevels[id].nbCards" :theme="game.theme" />
                 </div>
             </div>
-        </div>
-    </div>
-    <h2>Résultats par cartes</h2>
-    <div id="cardContainer">
-        <div id="card" v-for="card in genCardset" :key="card.id">
-            <CardStat :card="card" :nbCards="game.currentLevel.nbCards" :theme="game.theme" />
         </div>
     </div>
 </template>
 
 <style scoped>
-h1,h2 {
+h1,
+h2 {
     text-align: center;
     margin-bottom: 1rem;
 }
 
-h2{
-    width:100%;
+h2 {
+    width: 100%;
 
     margin-top: 1rem;
 }
+
 #global {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    border:solid 5px var(--border-color)
-}
-#levelContainer{
-    margin-top:1rem;
-
-    gap:1rem;
-    display:grid;
-    grid-template-columns: repeat(3,1fr);
+    border: solid 5px var(--border-color)
 }
 
-#cardContainer{
+#levelContainer {
+    margin-top: 1rem;
+}
+
+#cardContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap:4rem;
+    gap: 4rem;
 }
 
-#level{
+#level {
     padding-left: 2rem;
     background-color: var(--resultat-bg);
-    color:var(--resultat-text)
+    color: var(--resultat-text)
+}
+
+h3{
+    text-align: center;
+    margin-top:1rem
+}
+#scores{
+    display: flex;
+    gap:2rem;
+    justify-content: center;
+    margin-bottom:1rem
 }
 </style>
