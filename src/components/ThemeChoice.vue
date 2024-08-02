@@ -12,19 +12,22 @@ export default {
             <option value="abstract">Abstrait</option>
             <option value="cards">Personnages</option>
             <option value="colors">Couleurs</option>
+            <option value="pokemon">Pokemon</option>
         </select>
     </div>
 </template>
 
 <style scoped>
-label{
+label {
     margin-right: 1rem;
 }
+
 div {
     margin-bottom: 15rem;
-    
+
 }
-div>*{
+
+div>* {
     font-size: xx-large;
 }
 </style>

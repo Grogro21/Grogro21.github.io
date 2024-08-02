@@ -85,7 +85,7 @@ export default {
         <div id="level" v-for="(level, id) in levels" :key="id">
             <h3>Niveau {{ id + 1 }}</h3>
             <div id="scores">
-                <p>Temps : {{ (+level.time).toFixed(2) }}s</p>
+                <p>Temps : {{ ((+level.time)/60).toFixed(0) }}min {{ ((+level.time) % 60).toFixed(0) }}s</p>
                 <p>Meilleur score possible : {{ level.bestScore }}</p>
                 <p>Taux de réussite : {{ (+level.successRate).toFixed(2) }}%</p>
             </div>
