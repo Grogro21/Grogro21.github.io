@@ -89,7 +89,7 @@ export default {
                 <p>Meilleur score possible : {{ level.bestScore }}</p>
                 <p>Taux de réussite : {{ (+level.successRate).toFixed(2) }}%</p>
             </div>
-            <div id="cardContainer">
+            <div id="cardContainer" v-if="game.type=='test'">
                 <div id="card" v-for="card in concatenatedPairs[id]" :key="card.name">
                     <CardStat :card="card" :nbCards="game.pastLevels[id].nbCards" :theme="game.theme" />
                 </div>

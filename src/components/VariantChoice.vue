@@ -7,7 +7,7 @@ export default {
 
 <template>
     <div>
-        <label for="variant">Sélectionner le type de jeu:</label>
+        <label for="variant">Sélectionner le type de jeu :</label>
         <select name="variant" id="variant" @input="$emit('update:variant', $event.target.value)">
             <option value="test">Test de mémoire</option>
             <option value="relearn">Réapprentissage</option>
@@ -27,5 +27,4 @@ div {
 div>* {
     font-size: xx-large;
 }
-
 </style>
