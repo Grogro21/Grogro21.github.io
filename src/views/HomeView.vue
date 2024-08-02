@@ -20,7 +20,7 @@ export default {
     methods: {
         isValid() {
             // accepte les noms (avec potentiellemnt des tirets) de plus de 2 lettres chacun avec espace obligatoire entre nom et prénom
-            const reg = /^(?:[a-zA-Z]{2,}(?:[-]{0,1}[a-zA-Z]{2,}){0,1}(?:[ ]){1}){1}(?:[a-zA-Z]{2,}(?:[-]{0,1}[a-zA-Z]{2,}){0,1}){1}$/
+            const reg = /^(?:[a-zA-Zéèê]{2,}(?:[-]{0,1}[a-zA-Zéèê]{2,}){0,1}(?:[ ]){1}){1}(?:[a-zA-Zéèê]{2,}(?:[-]{0,1}[a-zA-Zéèê]{2,}){0,1}){1}$/
             return reg.test(this.username)
         },
         startGame() {
