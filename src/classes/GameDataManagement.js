@@ -2,7 +2,7 @@ import UserStats from "@/classes/UserStats.js"
 
 export default class GameDataManagement {
     static async readPicturesData(theme) {
-        return await (await fetch('@/assets/json/' + theme + '.json')).json()
+        return await (await fetch('/json/' + theme + '.json')).json()
     }
 
     static storeSession(username, theme, variant) {
