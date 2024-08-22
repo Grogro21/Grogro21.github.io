@@ -3,7 +3,7 @@
 export default class UserStats{
     constructor(game) {
         this.userName = game.userName
-        this.globalSuccessRate = game.calcGlobalSuccessRate()
+        this.globalSuccessRate = +game.calcGlobalSuccessRate().toFixed(2)
         let totalTime = 0
         let totalGuess = 0
         this.levels = []
@@ -12,9 +12,9 @@ export default class UserStats{
         game.pastLevels.forEach(level => {
             this.levels.push({
                 "guesses": level.nbGuess,
-                "time": level.timer,
+                "time": +level.timer.toFixed(2),
                 "bestScore": level.getMinScore(),
-                "successRate": level.calcSuccessRate(),
+                "successRate": +level.calcSuccessRate().toFixed(2),
                 "nbCards": level.cardSet.cardSet.length,
                 "clics": level.levelClics
             })
@@ -27,7 +27,7 @@ export default class UserStats{
                 "clics": card.clicCounter
             })
         })
-        this.totalTime = totalTime
+        this.totalTime = +totalTime.toFixed(2)
         this.totalGuess = totalGuess
         this.startTime = game.startTime
 

@@ -12,7 +12,8 @@ export default class Level {
         this.idLevel = id
         this.levelClics = []
         this.cardSet.cardSet.forEach(card => {
-            this.levelClics.push({"name":card.name,"clics":card.clicCounter})
+            this.levelClics.push({ "name": card.name, "clics": 0 })
+            card.clicLevel=0
         });
         this.hideEverything()
     }
@@ -66,7 +67,7 @@ export default class Level {
         }
 
         for (const i in this.levelClics) {
-            this.levelClics[i].clics = this.cardSet.cardSet[i].clicCounter - this.levelClics[i].clics
+            this.levelClics[i].clics = this.cardSet.cardSet[i].clicLevel
         }
             
         this.stopTimer()

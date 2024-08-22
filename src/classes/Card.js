@@ -7,6 +7,7 @@ export default class Card {
         this.clicCounter = 0
         this.position = position
         this.name = name
+        this.clicLevel=0
     }
 
     turnCard() {

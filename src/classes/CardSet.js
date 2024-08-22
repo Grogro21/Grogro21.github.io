@@ -19,6 +19,7 @@ export default class CardSet {
                     card.turnCard()
                     
                     card.clicCounter++
+                    card.clicLevel++
                     this.currentSelection.push(card)
                     return true
                 }

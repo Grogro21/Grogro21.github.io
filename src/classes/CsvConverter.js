@@ -13,6 +13,8 @@ export default class CsvConverter{
     }
     static convertlevelStatToCsv(json) {
         json.levels.forEach(level => {
+            const lvlclics = new Parser().parse(level.clics)
+            console.log(lvlclics)
             delete level.clics
             const csv = new Parser().parse(level)
             console.log(csv)
